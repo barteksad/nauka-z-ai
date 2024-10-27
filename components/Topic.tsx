@@ -18,7 +18,7 @@ function TopicInner({
         return (
             <form onSubmit={handleSubmit} className="flex flex-row w-full max-w-sm items-center space-x-2">
                 <Input type="text" placeholder="Nauka tabliczki mnożenia" value={input} onChange={handleInputChange} />
-                <Button type="submit">Generate</Button>
+                <Button type="submit" variant="outline" size="lg">Generate</Button>
             </form>
         );
     } else {

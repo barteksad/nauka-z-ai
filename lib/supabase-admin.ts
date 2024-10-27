@@ -22,8 +22,10 @@ const upsertProductRecord = async (product: Stripe.Product) => {
     description: product.description ?? null,
     image: product.images?.[0] ?? null,
     metadata: product.metadata,
-    features:
-      product.features.map((feature) => feature.name?.toString() ?? "") ?? [],
+    // marketing_features:
+    //   product.marketing_features.map(
+    //     (feature) => feature.name?.toString() ?? ""
+    //   ) ?? [],
   };
 
   const { error } = await supabaseAdmin.from("products").upsert([productData]);
