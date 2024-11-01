@@ -1,3 +1,4 @@
+import assert from "assert";
 import { z } from "zod";
 
 export type BaseQuestionType = {
@@ -28,49 +29,103 @@ export type QuestionType =
   | MultipleChoiceQuestionType
   | OpenEndedQuestionType;
 
-export type ExamType = {
+export type Section = {
+  name: string;
+  outline: string;
   questions: QuestionType[];
 };
 
+export type ExamType = {
+  sections: Section[];
+};
+
 export const examTypeSchema = z.object({
-  questions: z.array(
-    z.discriminatedUnion("type", [
+  sections: z
+    .array(
       z.object({
-        type: z.literal("single-choice"),
-        question: z.string().describe("One of questions to ask student"),
-        availableAnswers: z.array(
-          z
-            .string()
-            .describe(
-              "List of available answers to choose from. The correct one should be in this list and on random position"
-            )
-        ),
-        correctAnswer: z
+        name: z.string().describe("Name of the exam section "),
+        outline: z
           .string()
           .describe(
-            "Correct answer to the question. Must be one of availableAnswers"
+            "Outline of the exam section with short details about what student should expect and what will learn"
           ),
-      }),
-      z.object({
-        type: z.literal("multiple-choice"),
-        question: z.string().describe("One of questions to ask student"),
-        availableAnswers: z.array(
-          z
-            .string()
-            .describe(
-              "List of available answers to choose from. The correct ones should be in this list"
-            )
+        questions: z.array(
+          z.discriminatedUnion("type", [
+            z.object({
+              type: z.literal("single-choice"),
+              question: z
+                .string()
+                .describe("One of questions to ask student in this section"),
+              availableAnswers: z.array(
+                z
+                  .string()
+                  .describe(
+                    "List of available answers to choose from. The correct one should be in this list and on random position"
+                  )
+              ),
+              correctAnswer: z
+                .string()
+                .describe(
+                  "Correct answer to the question. Must be one of availableAnswers"
+                ),
+            }),
+            z.object({
+              type: z.literal("multiple-choice"),
+              question: z
+                .string()
+                .describe("One of questions to ask student in this section"),
+              availableAnswers: z.array(
+                z
+                  .string()
+                  .describe(
+                    "List of available answers to choose from. The correct ones should be in this list"
+                  )
+              ),
+              correctAnswers: z
+                .array(z.string())
+                .describe(
+                  "Correct answers to the question. Must be a subset of availableAnswers"
+                ),
+            }),
+            z.object({
+              type: z.literal("open-ended"),
+              question: z
+                .string()
+                .describe("One of questions to ask student in this section"),
+            }),
+          ])
         ),
-        correctAnswers: z
-          .array(z.string())
-          .describe(
-            "Correct answers to the question. Must be a subset of availableAnswers"
-          ),
-      }),
-      z.object({
-        type: z.literal("open-ended"),
-        question: z.string().describe("One of questions to ask student"),
-      }),
-    ])
-  ),
+      })
+    )
+    .describe("List of sections in the exam"),
 });
+
+assert(
+  examTypeSchema.safeParse({
+    sections: [
+      {
+        name: "test",
+        outline: "test",
+        questions: [
+          {
+            type: "single-choice",
+            question: "test",
+            availableAnswers: ["test"],
+            correctAnswer: "test",
+          },
+          {
+            type: "multiple-choice",
+            question: "test",
+            availableAnswers: ["test"],
+            correctAnswers: ["test"],
+          },
+          {
+            type: "open-ended",
+            question: "test",
+          },
+        ],
+      },
+    ],
+  }).success,
+  "ExamType must match examTypeSchema"
+);

@@ -1,14 +1,16 @@
 import { Suspense } from "react";
 import { QuestionType } from "@/lib/definitions";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle"
 
 function QuestionInner({
     question,
     setAnswer,
+    settedAnswer
 }: {
     question: QuestionType,
     setAnswer: (answer: string) => void,
+    settedAnswer: string | Set<string> | null,
 }) {
     if (question.type === "single-choice" || question.type === "multiple-choice") {
         return (
@@ -23,14 +25,17 @@ function QuestionInner({
                 <CardContent className="space-y-4">
                     <div className="flex flex-col space-y-2">
                         {question.availableAnswers.map((answer, index) => (
-                            <Button
+                            <Toggle
                                 key={index}
-                                onClick={() => setAnswer(answer)}
+                                pressed={(question.type === "single-choice" && settedAnswer === answer) ||
+                                    (question.type === "multiple-choice" && (settedAnswer as Set<string>).has(answer))}
+                                onPressedChange={() => setAnswer(answer)}
                                 variant="outline"
-                                className="w-full text-sm p-2"
+                                aria-label="Toggle italic"
+                                className="w-full text-sm p-2 data-[state=on]:border-blue-500 data-[state=on]:border-2"
                             >
                                 {answer}
-                            </Button>
+                            </Toggle>
                         ))}
                     </div>
                 </CardContent>
@@ -61,15 +66,18 @@ function QuestionInner({
 export default function Question({
     question,
     setAnswer,
+    settedAnswer,
 }: {
     question: QuestionType,
     setAnswer: (answer: string) => void,
+    settedAnswer: string | Set<string> | null,
 }) {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <QuestionInner
                 question={question}
                 setAnswer={setAnswer}
+                settedAnswer={settedAnswer}
             />
         </Suspense>
     );

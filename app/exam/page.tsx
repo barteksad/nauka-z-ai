@@ -2,8 +2,8 @@
 
 import { useChat } from "ai/react";
 import Topic from "@/components/Topic";
-import Questions from "@/components/Questions";
 import Answer from "@/components/Answer";
+import Sections from "@/components/Sections";
 
 export default function Exam() {
     const { messages, input, handleInputChange, handleSubmit, addToolResult } =
@@ -20,7 +20,7 @@ export default function Exam() {
                 handleSubmit={handleSubmit}
             />
             {messages.length > 1 && (
-                <Questions
+                <Sections
                     message={messages[1]}
                     addToolResult={addToolResult}
                 />
