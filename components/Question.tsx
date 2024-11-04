@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { QuestionType } from "@/lib/definitions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle"
+import { Textarea } from "@/components/ui/textarea"
 
 function QuestionInner({
     question,
@@ -52,9 +53,8 @@ function QuestionInner({
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <input
-                        type="text"
-                        className="w-full bg-gray-100 p-2 rounded-md"
+                    <Textarea
+                        // className="w-full bg-gray-100 p-2 rounded-md"
                         onChange={(e) => setAnswer(e.target.value)}
                     />
                 </CardContent>

@@ -1,4 +1,5 @@
-import { openai } from "@ai-sdk/openai";
+// import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "@ai-sdk/openai";
 import { convertToCoreMessages, streamText } from "ai";
 import { examTypeSchema } from "@/lib/definitions";
 // Allow streaming responses up to 30 seconds
@@ -8,7 +9,12 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = await streamText({
-    model: openai("gpt-4o"),
+    // model: openai("gpt-4o"),
+    model: createOpenAI({
+      name: "xai",
+      baseURL: "https://api.x.ai/v1",
+      apiKey: process.env.XAI_API_KEY ?? "",
+    })("grok-beta"),
     messages: convertToCoreMessages(messages),
     experimental_toolCallStreaming: true,
     tools: {
