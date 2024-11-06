@@ -2,10 +2,43 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { convertToCoreMessages, streamText } from "ai";
 import { examTypeSchema } from "@/lib/definitions";
+import { usageTick } from "@/lib/supabase-admin";
+import { NextResponse } from "next/server";
+import { isAdmin } from "@/lib/actions";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/supabase/types_db";
+import { cookies } from "next/headers";
+
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const supabase = createRouteHandlerClient<Database>({ cookies });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("Could not get user");
+
+  let canSend = await isAdmin(supabase);
+
+  if (!canSend) {
+    try {
+      const tick = await usageTick(user.id);
+      canSend = tick;
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json(
+        { message: "Internal server error" },
+        { status: 500 }
+      );
+    }
+  }
+
+  if (!canSend) {
+    return NextResponse.json({ message: "Limits reached" }, { status: 429 });
+  }
+  
   const { messages } = await req.json();
 
   const result = await streamText({
