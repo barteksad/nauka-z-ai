@@ -15,6 +15,7 @@ export default function AuthUI() {
   }, []);
 
   const { supabase } = useSupabase();
+  
   return (
     <Auth
       supabaseClient={supabase}

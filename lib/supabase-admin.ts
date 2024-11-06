@@ -193,9 +193,8 @@ const manageSubscriptionStatusChange = async (
     );
 };
 
-const searchTick = async (userID: string): Promise<boolean> => {
-  // @ts-expect-error - ???
-  const { error } = await supabaseAdmin.rpc("search_tick", {
+const usageTick = async (userID: string): Promise<boolean> => {
+  const { error } = await supabaseAdmin.rpc("usage_tick", {
     current_user_id: userID,
   });
   if (error) {
@@ -210,5 +209,5 @@ export {
   upsertPriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
-  searchTick,
+  usageTick,
 };
