@@ -161,9 +161,6 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
-
-
 CREATE OR REPLACE FUNCTION "public"."usage_tick"("current_user_id" "uuid") RETURNS "void"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -681,12 +678,6 @@ GRANT ALL ON FUNCTION "public"."check_usage_limits"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."handle_new_subscription"() TO "anon";
 GRANT ALL ON FUNCTION "public"."handle_new_subscription"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."handle_new_subscription"() TO "service_role";
-
-
-
-GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "anon";
-GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "authenticated";
-GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "service_role";
 
 
 

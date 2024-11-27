@@ -1,0 +1,1 @@
+insert into product_limits (id, monthly_limit) values ('prod_RIGTGuB1VKhkus', 200);
