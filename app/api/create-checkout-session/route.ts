@@ -1,9 +1,7 @@
-import { cookies } from "next/headers";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { stripe } from "@/lib/stripe";
 import { createOrRetrieveCustomer } from "@/lib/supabase-admin";
 import { getURL } from "@/lib/utils";
-import { Database } from "@/supabase/types_db";
 
 export async function POST(req: Request) {
   if (req.method === "POST") {
@@ -12,7 +10,7 @@ export async function POST(req: Request) {
 
     try {
       // 2. Get the user from Supabase auth
-      const supabase = createRouteHandlerClient<Database>({ cookies });
+      const supabase = await createServerSupabaseClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();

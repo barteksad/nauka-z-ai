@@ -23,7 +23,7 @@ function TopicInner({
         );
     } else {
         return (
-            <div>
+            <div className="text-3xl font-bold text-center mb-6">
                 {messages[0].content}
             </div>
         )

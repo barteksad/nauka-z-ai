@@ -5,15 +5,13 @@ import { examTypeSchema } from "@/lib/definitions";
 import { usageTick } from "@/lib/supabase-admin";
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/actions";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/supabase/types_db";
-import { cookies } from "next/headers";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const supabase = createRouteHandlerClient<Database>({ cookies });
+  const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -38,7 +36,7 @@ export async function POST(req: Request) {
   if (!canSend) {
     return NextResponse.json({ message: "Limits reached" }, { status: 429 });
   }
-  
+
   const { messages } = await req.json();
 
   const result = await streamText({
