@@ -1,6 +1,6 @@
 import type { Database } from "@/supabase/types_db";
 
-import type { SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { Tables } from "@/supabase/types_db";
 
@@ -45,7 +45,9 @@ export async function getUserProductAndLimits(
   return { productId: productId, userLimits: userLimits! };
 }
 
-export async function isAdmin(supabase: SupabaseClient<Database>): Promise<boolean> {
+export async function isAdmin(
+  supabase: SupabaseClient<Database>
+): Promise<boolean> {
   try {
     const { data: adminRow } = await supabase
       .from("admins")
@@ -60,4 +62,4 @@ export async function isAdmin(supabase: SupabaseClient<Database>): Promise<boole
     console.error("Error:", error);
     return false;
   }
-} 
+}
