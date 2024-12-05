@@ -51,15 +51,20 @@ export default function SearchLimitsInfo({
             {limitsInfo.userLimits.free_count}
           </p>
         );
-      } else {
-        if (limitsInfo.userLimits.monthly_count) {
-          renderListAcc.push(
-            <p key={`weekly-${limitKey}`}>
-              Monthly exams left:{" "}
-              {limitsInfo.userLimits.monthly_count}
-            </p>
-          );
-        }
+      } else if (limitsInfo.userLimits.monthly_count) {
+        renderListAcc.push(
+          <p key={`weekly-${limitKey}`}>
+            Monthly exams left:{" "}
+            {limitsInfo.userLimits.monthly_count}
+          </p>
+        );
+      }
+      else {
+        renderListAcc.push(
+          <p key={`no-limits`}>
+            Limits reached, please upgrade your plan.
+          </p>
+        );
       }
     }
 
