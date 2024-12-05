@@ -13,7 +13,7 @@ function QuestionsInner({
 }) {
 
     return (
-        <div>
+        <div className="space-y-4">
             {questions.map((question, index) => (
                 <Question
                     key={index}

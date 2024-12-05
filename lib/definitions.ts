@@ -68,6 +68,7 @@ export const examTypeSchema = z.object({
                 .describe(
                   "Correct answer to the question. Must be one of availableAnswers"
                 ),
+              difficulty: z.enum(["easy", "medium", "hard"]),
             }),
             z.object({
               type: z.literal("multiple-choice"),
@@ -86,12 +87,14 @@ export const examTypeSchema = z.object({
                 .describe(
                   "Correct answers to the question. Must be a subset of availableAnswers"
                 ),
+              difficulty: z.enum(["easy", "medium", "hard"]),
             }),
             z.object({
               type: z.literal("open-ended"),
               question: z
                 .string()
                 .describe("One of questions to ask student in this section"),
+              difficulty: z.enum(["easy", "medium", "hard"]),
             }),
           ])
         ),
@@ -112,16 +115,19 @@ assert(
             question: "test",
             availableAnswers: ["test"],
             correctAnswer: "test",
+            difficulty: "easy",
           },
           {
             type: "multiple-choice",
             question: "test",
             availableAnswers: ["test"],
             correctAnswers: ["test"],
+            difficulty: "easy",
           },
           {
             type: "open-ended",
             question: "test",
+            difficulty: "hard",
           },
         ],
       },
