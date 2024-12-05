@@ -6,6 +6,7 @@ import { Message } from "ai";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 function formatSelectedAnswers(selectedAnswers: (string | Set<string> | null)[][]) {
     return (
@@ -90,20 +91,21 @@ function SectionsInner({
     return (
         <div>
             {exam.sections.map((section, index) => (
-                <div key={index}>
-                    <h1>
-                        {section.name}
-                    </h1>
-                    <p>
-                        {section.outline}
-                    </p>
+                <Card key={index} className="mb-6">
+                    <CardHeader>
+                        <CardTitle>{section.name}</CardTitle>
+                    </CardHeader>
+                    <p className="text-muted-foreground mb-4 p-4">{section.outline}</p>
                     <Separator className="my-4" />
-                    <Questions
-                        questions={section.questions}
-                        setAnswer={(questionIndex, answer) => setSelectedAnswer(index, questionIndex, answer)}
-                        settedAnswers={sectionAnswers[index]}
-                    />
-                </div>
+                    <CardContent>
+
+                        <Questions
+                            questions={section.questions}
+                            setAnswer={(questionIndex, answer) => setSelectedAnswer(index, questionIndex, answer)}
+                            settedAnswers={sectionAnswers[index]}
+                        />
+                    </CardContent>
+                </Card>
             )
             )
             }
