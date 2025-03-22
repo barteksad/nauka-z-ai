@@ -1,5 +1,5 @@
 // import { openai } from "@ai-sdk/openai";
-import { createOpenAI } from "@ai-sdk/openai";
+import { openai } from "@ai-sdk/openai";
 import { convertToCoreMessages, streamText } from "ai";
 import { examTypeSchema } from "@/lib/definitions";
 import { usageTick } from "@/lib/supabase-admin";
@@ -40,12 +40,12 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = await streamText({
-    // model: openai("gpt-4o"),
-    model: createOpenAI({
-      name: "xai",
-      baseURL: "https://api.x.ai/v1",
-      apiKey: process.env.XAI_API_KEY ?? "",
-    })("grok-beta"),
+    model: openai("o3-mini-2025-01-31"),
+    // model: createOpenAI({
+    //   name: "xai",
+    //   baseURL: "https://api.x.ai/v1",
+    //   apiKey: process.env.XAI_API_KEY ?? "",
+    // })("grok-beta"),
     messages: convertToCoreMessages(messages),
     experimental_toolCallStreaming: true,
     tools: {
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     },
     toolChoice: messages.length === 1 ? "required" : "none",
     temperature: 1,
-    topP: 0.95,
+    topK: 50,
     system: `\
 Generate one detailed exam for a specific topic the student is learning. 
 The exam must be divided into coherent and exhaustive sections covering all the key aspects of the topic.

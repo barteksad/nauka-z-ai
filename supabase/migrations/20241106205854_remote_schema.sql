@@ -111,7 +111,7 @@ CREATE OR REPLACE FUNCTION "public"."check_usage_limits"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
 BEGIN
-    IF NEW.free_count < 0 OR NEW.monthly_count < 0 THEN
+    IF NEW.free_count < 0 AND NEW.monthly_count < 0 THEN
         RAISE EXCEPTION 'Limits reached';
     END IF;
     RETURN NEW;
